@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:template_getx/app/routes/routes.dart';
 import 'package:template_getx/app/views/widgets/text_button_widget.dart';
 import 'package:template_getx/app/views/widgets/text_input_widget.dart';
 
@@ -19,16 +19,15 @@ class LoginScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              SizedBox(height: 60.h),
-              SvgPicture.asset(
-                'assets/logos/aurora.svg',
-                width: 260.w,
-                colorFilter: const ColorFilter.mode(
-                  Color(0xFF39B54A),
-                  BlendMode.srcIn,
-                ),
-              ),
-              SizedBox(height: 120.h),
+             SizedBox(height: 50.h),
+              Icon(Icons.phone_in_talk, size: 0.3.sw, color: Theme.of(context).primaryColor),
+            SizedBox(height: 10.h),
+            Text(
+              'loginTitle'.tr,
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w500),
+            ),
+              SizedBox(height: 80.h),
 
               /// Email
               Text(
@@ -108,7 +107,7 @@ class LoginScreen extends StatelessWidget {
               TextWidgetButton(
                 text: 'login'.tr,
                 onPressed: () {
-                  // Handle login action
+                  Get.toNamed(AppRoutes.homeScreen);
                 },
               ),
 

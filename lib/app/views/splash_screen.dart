@@ -27,18 +27,11 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SvgPicture.asset(
-              'assets/logos/aurora.svg',
-              width: 0.8.sw,
-              colorFilter: const ColorFilter.mode(
-                Color(0xFF39B54A),
-                BlendMode.srcIn,
-              ),
-            ),
+          Icon(Icons.phone_in_talk, size: 0.5.sw, color: Theme.of(context).primaryColor),
             SizedBox(height: 10.h),
             Text(
               'title'.tr,
-              style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w500),
+              style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w700),
             ),
           ],
         ),

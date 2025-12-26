@@ -4,8 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:template_getx/core/constants/language/language.dart';
 
-class TemplateGetx extends StatelessWidget {
-  const TemplateGetx({super.key});
+class CallingApp extends StatelessWidget {
+  const CallingApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,9 +16,9 @@ class TemplateGetx extends StatelessWidget {
       builder: (context, child) {
         return GetMaterialApp(
           debugShowCheckedModeBanner: false,
-          title: 'TemplateGetx',
+          title: 'Calling App',
           translations: Language(),
-          locale: const Locale('en', 'US'), //default locale
+          locale: const Locale('en', 'US'), 
           fallbackLocale: const Locale('en', 'US'),
           theme: ThemeData(
             primaryColor: const Color(0xFF39B54A),

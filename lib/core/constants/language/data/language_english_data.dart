@@ -1,6 +1,7 @@
 Map<String, String> languageEnglishData = {
-  'title': 'GetX Template',
+  'title': 'Calling App',
   'login': 'Login',
+  'loginTitle': 'Login to your account',
   'email': 'Email',
   'enterEmail': 'Enter your email',
   'password': 'Password',

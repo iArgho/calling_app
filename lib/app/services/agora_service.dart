@@ -3,36 +3,40 @@ import 'package:permission_handler/permission_handler.dart';
 import '../../core/constants/credentials/credential.dart';
 
 class AgoraService {
-  RtcEngine? _engine;
-
-  RtcEngine? get engine => _engine;
+  late final RtcEngine _engine;
+  RtcEngine get engine => _engine;
 
   Future<RtcEngine> init({
     required void Function() onLocalJoined,
     required void Function(int remoteUid) onRemoteJoined,
     required void Function() onRemoteLeft,
   }) async {
-    await _requestPermissions();
+    // Request permissions
+    await Permission.camera.request();
+    await Permission.microphone.request();
 
+    // Initialize engine
     _engine = createAgoraRtcEngine();
-
-    await _engine!.initialize(
+    await _engine.initialize(
       const RtcEngineContext(
         appId: appId,
         channelProfile: ChannelProfileType.channelProfileCommunication,
       ),
     );
 
-    _registerEvents(
-      onLocalJoined: onLocalJoined,
-      onRemoteJoined: onRemoteJoined,
-      onRemoteLeft: onRemoteLeft,
+    // Register events
+    _engine.registerEventHandler(
+      RtcEngineEventHandler(
+        onJoinChannelSuccess: (_, _) => onLocalJoined(),
+        onUserJoined: (_, uid, _) => onRemoteJoined(uid),
+        onUserOffline: (_, _, _) => onRemoteLeft(),
+      ),
     );
 
-    await _engine!.enableVideo();
-    await _engine!.startPreview();
-
-    await _engine!.joinChannel(
+    // Enable video and join channel
+    await _engine.enableVideo();
+    await _engine.startPreview();
+    await _engine.joinChannel(
       token: token,
       channelId: channel,
       uid: 0,
@@ -45,38 +49,12 @@ class AgoraService {
       ),
     );
 
-    return _engine!;
+    return _engine;
   }
 
   /// Leave channel & cleanup
   Future<void> dispose() async {
-    if (_engine != null) {
-      await _engine!.leaveChannel();
-      await _engine!.release();
-      _engine = null;
-    }
-  }
-
-  /// Permissions
-  Future<void> _requestPermissions() async {
-    await [
-      Permission.camera,
-      Permission.microphone,
-    ].request();
-  }
-
-  /// Event handlers
-  void _registerEvents({
-    required void Function() onLocalJoined,
-    required void Function(int remoteUid) onRemoteJoined,
-    required void Function() onRemoteLeft,
-  }) {
-    _engine!.registerEventHandler(
-      RtcEngineEventHandler(
-        onJoinChannelSuccess: (_, _) => onLocalJoined(),
-        onUserJoined: (_, uid, _) => onRemoteJoined(uid),
-        onUserOffline: (_, _, _) => onRemoteLeft(),
-      ),
-    );
+    await _engine.leaveChannel();
+    await _engine.release();
   }
 }

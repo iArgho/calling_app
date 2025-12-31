@@ -6,6 +6,7 @@ version: 1.0.0+1
 
 environment:
   sdk: ^3.10.4
+
 dependencies:
   flutter:
     sdk: flutter
@@ -19,18 +20,15 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
- 
   flutter_lints: ^6.0.0
-
+  flutter_launcher_icons: ^0.14.4 # For generating app launcher icons
 
 flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
+  assets:
+    - assets/icons/appstore.png # App icon for flutter_launcher_icons
 
   # fonts:
   #   - family: Schyler
@@ -43,4 +41,9 @@ flutter:
   #       - asset: fonts/TrajanPro.ttf
   #       - asset: fonts/TrajanPro_Bold.ttf
   #         weight: 700
- 
+
+flutter_launcher_icons:
+  # Configure launcher icons
+  android: true
+  ios: true
+  image_path: "assets/icons/appstore.png" 

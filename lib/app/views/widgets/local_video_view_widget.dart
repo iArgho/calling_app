@@ -18,12 +18,22 @@ class LocalVideoView extends StatelessWidget {
       width: 100.w,
       height: 150.h,
       child: joined
-          ? ClipRRect(
-              borderRadius: BorderRadius.circular(12.r),
-              child: AgoraVideoView(
-                controller: VideoViewController(
-                  rtcEngine: engine,
-                  canvas: const VideoCanvas(uid: 0),
+          ? Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12.r),
+                border: Border.all(
+                  color: Colors.grey.withOpacity(0.9),
+                  width: 1.5.w,
+                ),
+                
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12.r),
+                child: AgoraVideoView(
+                  controller: VideoViewController(
+                    rtcEngine: engine,
+                    canvas: const VideoCanvas(uid: 0),
+                  ),
                 ),
               ),
             )

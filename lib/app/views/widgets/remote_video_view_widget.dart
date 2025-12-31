@@ -16,16 +16,34 @@ class RemoteVideoView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (remoteUid != null) {
-      return AgoraVideoView(
-        controller: VideoViewController.remote(
-          rtcEngine: engine,
-          canvas: VideoCanvas(uid: remoteUid),
-          connection: const RtcConnection(channelId: channel),
+      return Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12.r),
+          border: Border.all(
+            color: Colors.white.withOpacity(0.9),
+            width: 1.5.w,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.25),
+              blurRadius: 8.r,
+              offset: Offset(0, 4.h),
+            ),
+          ],
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(12.r),
+          child: AgoraVideoView(
+            controller: VideoViewController.remote(
+              rtcEngine: engine,
+              canvas: VideoCanvas(uid: remoteUid),
+              connection: const RtcConnection(channelId: channel),
+            ),
+          ),
         ),
       );
     }
 
-    /// Waiting state
     return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,

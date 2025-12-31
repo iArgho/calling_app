@@ -30,7 +30,7 @@ class _SplashScreenState extends State<SplashScreen> {
             SizedBox(height: 10.h),
             Text(
               'title'.tr,
-              style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w700),
+              style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.w700),
             ),
           ],
         ),

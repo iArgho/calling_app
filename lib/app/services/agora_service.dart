@@ -7,7 +7,6 @@ class AgoraService {
 
   RtcEngine? get engine => _engine;
 
-  /// Initialize Agora Engine
   Future<RtcEngine> init({
     required void Function() onLocalJoined,
     required void Function(int remoteUid) onRemoteJoined,
@@ -74,9 +73,9 @@ class AgoraService {
   }) {
     _engine!.registerEventHandler(
       RtcEngineEventHandler(
-        onJoinChannelSuccess: (_, __) => onLocalJoined(),
-        onUserJoined: (_, uid, __) => onRemoteJoined(uid),
-        onUserOffline: (_, __, ___) => onRemoteLeft(),
+        onJoinChannelSuccess: (_, _) => onLocalJoined(),
+        onUserJoined: (_, uid, _) => onRemoteJoined(uid),
+        onUserOffline: (_, _, _) => onRemoteLeft(),
       ),
     );
   }

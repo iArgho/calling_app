@@ -3,6 +3,7 @@ import 'package:calling_app/app/views/widgets/local_video_view_widget.dart';
 import 'package:calling_app/app/views/widgets/remote_video_view_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key, required this.title});
@@ -56,21 +57,32 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     return Scaffold(
-      body: Stack(
-        children: [
-          RemoteVideoView(
-            engine: _engine!,
-            remoteUid: _remoteUid,
+      body: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.all(8.r),
+          child: Stack(
+            children: [
+              
+              RemoteVideoView(
+                engine: _engine!,
+                remoteUid: _remoteUid,
+              ),
+          
+              Positioned(
+                top: 20.h,
+                left: 20.w,
+                child: SizedBox(
+                  width: 120.w,
+                  height: 160.h,
+                  child: LocalVideoView(
+                    engine: _engine!,
+                    joined: _localJoined,
+                  ),
+                ),
+              ),
+            ],
           ),
-          Positioned(
-            top: 20,
-            left: 20,
-            child: LocalVideoView(
-              engine: _engine!,
-              joined: _localJoined,
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }

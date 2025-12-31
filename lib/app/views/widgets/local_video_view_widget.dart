@@ -1,5 +1,6 @@
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class LocalVideoView extends StatelessWidget {
   final RtcEngine engine;
@@ -14,16 +15,25 @@ class LocalVideoView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 100,
-      height: 150,
+      width: 100.w,
+      height: 150.h,
       child: joined
-          ? AgoraVideoView(
-              controller: VideoViewController(
-                rtcEngine: engine,
-                canvas: const VideoCanvas(uid: 0),
+          ? ClipRRect(
+              borderRadius: BorderRadius.circular(12.r),
+              child: AgoraVideoView(
+                controller: VideoViewController(
+                  rtcEngine: engine,
+                  canvas: const VideoCanvas(uid: 0),
+                ),
               ),
             )
-          : const Center(child: CircularProgressIndicator()),
+          : Center(
+              child: SizedBox(
+                width: 24.w,
+                height: 24.w,
+                child: const CircularProgressIndicator(strokeWidth: 2),
+              ),
+            ),
     );
   }
 }

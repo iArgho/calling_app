@@ -1,6 +1,7 @@
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:calling_app/core/constants/credentials/credential.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class RemoteVideoView extends StatelessWidget {
   final RtcEngine engine;
@@ -22,13 +23,29 @@ class RemoteVideoView extends StatelessWidget {
           connection: const RtcConnection(channelId: channel),
         ),
       );
-    } else {
-      return const Center(
-        child: Text(
-          'Please wait for remote user to join',
-          textAlign: TextAlign.center,
-        ),
-      );
     }
+
+    /// Waiting state
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(
+            width: 32.w,
+            height: 32.w,
+            child: const CircularProgressIndicator(strokeWidth: 3),
+          ),
+          SizedBox(height: 16.h),
+          Text(
+            'Please wait for remote user to join',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 14.sp,
+              color: Colors.grey.shade700,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

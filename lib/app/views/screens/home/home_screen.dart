@@ -1,13 +1,11 @@
-import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:calling_app/app/services/agora_service.dart';
 import 'package:calling_app/app/views/widgets/local_video_view_widget.dart';
 import 'package:calling_app/app/views/widgets/remote_video_view_widget.dart';
-import 'package:calling_app/core/constants/credentials/credential.dart';
 import 'package:flutter/material.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key, required this.title});
-
   final String title;
 
   @override
@@ -15,10 +13,11 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final AgoraService _agoraService = AgoraService();
+
   RtcEngine? _engine;
   int? _remoteUid;
-  bool _localUserJoined = false;
-  bool _isEngineInitialized = false;
+  bool _localJoined = false;
 
   @override
   void initState() {
@@ -28,13 +27,29 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void dispose() {
-    _disposeAgora();
+    _agoraService.dispose();
     super.dispose();
+  }
+
+  Future<void> _initAgora() async {
+    _engine = await _agoraService.init(
+      onLocalJoined: () {
+        setState(() => _localJoined = true);
+      },
+      onRemoteJoined: (uid) {
+        setState(() => _remoteUid = uid);
+      },
+      onRemoteLeft: () {
+        setState(() => _remoteUid = null);
+      },
+    );
+
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    if (!_isEngineInitialized || _engine == null) {
+    if (_engine == null) {
       return const Scaffold(
         body: Center(child: CircularProgressIndicator()),
       );
@@ -47,79 +62,16 @@ class _HomeScreenState extends State<HomeScreen> {
             engine: _engine!,
             remoteUid: _remoteUid,
           ),
-
           Positioned(
             top: 20,
             left: 20,
             child: LocalVideoView(
               engine: _engine!,
-              joined: _localUserJoined,
+              joined: _localJoined,
             ),
           ),
         ],
       ),
     );
   }
-
-
-  Future<void> _initAgora() async {
-    // Request permissions
-    await [Permission.camera, Permission.microphone].request();
-
-    _engine = createAgoraRtcEngine();
-    await _engine!.initialize(const RtcEngineContext(
-      appId: appId,
-      channelProfile: ChannelProfileType.channelProfileCommunication,
-    ));
-
-    await _engine!.enableVideo();
-    await _engine!.startPreview();
-
-    _registerEventHandlers();
-
-    await _engine!.joinChannel(
-      token: token,
-      channelId: channel,
-      uid: 0,
-      options: const ChannelMediaOptions(
-        autoSubscribeVideo: true,
-        autoSubscribeAudio: true,
-        publishCameraTrack: true,
-        publishMicrophoneTrack: true,
-        clientRoleType: ClientRoleType.clientRoleBroadcaster,
-      ),
-    );
-
-    setState(() {
-      _isEngineInitialized = true;
-    });
-  }
-
-  /// Dispose Agora resources
-  Future<void> _disposeAgora() async {
-    if (_engine != null) {
-      await _engine!.leaveChannel();
-      await _engine!.release();
-    }
-  }
-
-
-  void _registerEventHandlers() {
-    _engine!.registerEventHandler(
-      RtcEngineEventHandler(
-        onJoinChannelSuccess: (RtcConnection connection, int elapsed) {
-          setState(() => _localUserJoined = true);
-        },
-        onUserJoined: (RtcConnection connection, int remoteUid, int elapsed) {
-          setState(() => _remoteUid = remoteUid);
-        },
-        onUserOffline: (RtcConnection connection, int remoteUid,
-            UserOfflineReasonType reason) {
-          setState(() => _remoteUid = null);
-        },
-      ),
-    );
-  }
 }
-
-
